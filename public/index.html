@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiroom</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        #add-questions{
+            display: none;
+        }
+        #game{
+            display: none;
+        }
+    </style>
+</head>
+    <div id = "input-form">
+        <label for="username-input">Username</label>
+        <input type="text" id="username-input">
+        <br><br>
+        <label for="join-room-input">Join Room</label>
+        <input type="text" id = "join-room-input"  placeholder="Enter room code">
+        <br><br>
+        <button id = "join-btn">Join</button>
+        <br><br> 
+        <label for="create-Room-Input">Room Code</label>
+        <input type="text" id = "create-Room-Input"  placeholder=" Code" disabled>
+        <br><br>
+        <button id = "create-btn">Create And Join</button>
+    </div>
+
+    <div id="add-questions">
+        <h3>Game starts in: <span id="time-left">Not started</span></h3>
+        <label for="roomCode">Room Code: </label>
+        <input type="text" id = "roomCode"  disabled>
+        <br>
+        <input type="text" id = "ques-input" name = "quesInput" placeholder="EnterQuestion">
+        <button id = "add-ques-btn">Add Question</button>
+        <br><br>
+        <button id="start-game-btn">Begin game</button>
+    </div>
+    
+    <div id="game">
+        <input type="text" id = "random-question" placeholder="Asked question will appear here">
+        <button id=rotate-btn>Rotate</button><br><br>
+        <input type="text" id = "player-turn" placeholder="Whose turn">
+        <button id="rand-ques-btn" disabled>Random Question</button>
+    </div>
+</body>
+<script src="web.js"></script>
+</html>
