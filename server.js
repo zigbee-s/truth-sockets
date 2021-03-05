@@ -91,7 +91,10 @@ io.on('connection',(socket) => {
     })    
     
     socket.on("game-started", data => {
-        rooms[data.roomCode].roomGameState = "started";
+        // Only if the room exists
+        if(rooms[data.roomCode]){
+            rooms[data.roomCode].roomGameState = "started";
+        }
     })
 
     socket.on('player-turn', data=>{
