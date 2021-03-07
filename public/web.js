@@ -9,6 +9,9 @@ socket.on('message',message => {
 const form = document.getElementById('input-form');
 const addQues = document.getElementById('add-questions');
 const game = document.getElementById('game');
+const containerDiv = document.querySelector('.container');
+
+
 
 //Input boxes
 const usernameInput = document.getElementById('username-input');
@@ -28,9 +31,10 @@ const createBtn = document.getElementById('create-btn');
 const addQuesBtn = document.getElementById('add-ques-btn');
 const startGameBtn = document.getElementById('start-game-btn');
 const rotateBtn = document.getElementById('rotate-btn');
-const randQuesBtn = document.getElementById('rand-ques-btn');
 
-let timeLeft = 30;
+
+let timeLeft = 10;
+let action = 1;
 
 const socketData={
     roomCode : "",
@@ -38,19 +42,14 @@ const socketData={
     player :0,
     totalPlayers :0,
     userName : "",
+    turn : false,
 };
 
 // Listening for emits
 socket.on('joined', roomState=>{
-    if(roomState.roomGameState == "started"){
-        form.style.display = "none";
-        addQues.style.display = "blocl";
-        game.style.display = "block"
-    }
-    else{
-        form.style.display = "none";
-        addQues.style.display = "block";
-    }
+    
+    form.style.display = "none";
+    addQues.style.display = "block";
 
     roomCodeInput.value = roomState.code; 
 
@@ -82,23 +81,40 @@ socket.on('add-ques',newQuesArray=>{
 })
 
 // Start game countdown
-socket.on('start-game', ()=>{
+socket.on('begin-game', ()=>{
     countdown();
 })
 
-// Check if it's socket's turn and show whose turn it is
-socket.on('player-turn',userTurn=>{
-    playerTurnInput.value = userTurn;
-    if(userTurn == socketData.userName){
-        console.log(socketData.userName +"'s turn");
-        randQuesBtn.disabled = false;
+
+socket.on('game-started',quesArray => {
+    console.log(quesArray);
+    produce(quesArray);
+})
+
+socket.on('card-clicked',data => {
+    let x = document.getElementById(data.cardId);
+    socketData.questionArray = data.quesArray;
+    x.style.transform = "translateY(100px)"; 
+    for(let j =0; j<data.quesArray.length; j++){
+        console.log("off");
+        let y = document.getElementById(j+"a");
+        console.log(y);
+        y.onclick = "return false";
     }
 })
 
-// Display a random question
-socket.on('rand-ques', ques =>{
-    randQuesInput.value = ques;
-    randQuesBtn.disabled = "true"
+// Check if it's socket's turn and show whose turn it is
+socket.on('player-turn',display=>{
+    containerDiv.innerHTML = "";
+    produce(display.shuffledArray);
+    playerTurnInput.value = display.userTurn;
+    if(display.userTurn == socketData.userName){
+        console.log(socketData.userName +"'s turn");
+        socketData.turn = true;
+    }
+    else{
+        socketData.turn = false;
+    }
 })
 
 
@@ -109,7 +125,6 @@ createBtn.addEventListener('click',createButtonHandler);
 addQuesBtn.addEventListener('click',addQueHandler);
 startGameBtn.addEventListener('click',startGamehandler);
 rotateBtn.addEventListener('click',rotateHandler);
-randQuesBtn.addEventListener('click',randomQuesHandler);
 
 // Functions
 function createButtonHandler(){
@@ -139,16 +154,14 @@ function startGamehandler(){
     let data = {
         roomCode : socketData.roomCode,
     };
-    socket.emit('start-game',data);
+    socket.emit('begin-game',data);
 }
 
 // Selecting a random player
 function rotateHandler(){
     let data = { 
         roomCode : socketData.roomCode, 
-        turn : Math.floor(Math.random() * socketData.totalPlayers) +1,
     };
-    console.log("turn: "+ data.turn);
     socket.emit('player-turn',data);
 }
 
@@ -162,24 +175,56 @@ function randomQuesHandler(){
 }
 
 function countdown(){
-    setInterval(function(){
+    let interval = setInterval(function(){
         if(timeLeft <=0){
-            clearInterval(timeLeft = 0);
-            startMainGame();
+            clearInterval(interval);
+
+            addQues.style.display = "none";
+            game.style.display = "block";
+
+            let data = {
+                gameState : "started",
+                roomCode : socketData.roomCode,
+            };
+                socket.emit("game-started",data);
+        
         }
         timeLeftDisplay.innerHTML = timeLeft;
         timeLeft -= 1; 
     },1000)
 }
 
-function startMainGame(){
-    addQues.style.display = "none";
-    game.style.display = "block";
-    
-    let data = {
-        gameState : "started",
-        roomCode : socketData.roomCode,
-    };
 
-    socket.emit("game-started",data);
+function produce(arr){
+    for(let i = 0; i < arr.length ; i++){
+        containerDiv.innerHTML += `<div class="card"  >
+        <div class="face face1"  id = ${i+"a"} onclick = "onClickCardHandler(${i})">
+          <div class="content">
+             <i class="fab fa-windows"></i>            
+            <h3>Windows</h3>
+          </div>
+        </div>
+        <div class="face face2" id = ${i}>
+          <div class="content">
+            <p>${arr[i]}</p>
+          </div>
+        </div>
+     </div>`
+    }
 }
+
+
+function onClickCardHandler(i) {
+    if(socketData.turn){
+        let data = {
+            cardId: i,
+            roomCode : socketData.roomCode,
+        };
+        socket.emit("card-clicked",data)
+    }
+    else{
+        return false;
+    }
+  }
+
+

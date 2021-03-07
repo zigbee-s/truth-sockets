@@ -1,5 +1,6 @@
 module.exports = {
     makeid,
+    shuffleArray,
   }
   
   // Function to return a random code
@@ -13,3 +14,7 @@ module.exports = {
      return result;
   }
   
+  function shuffleArray(arr) {
+   let shuffled = arr.sort(() => Math.random() - 0.5)
+   return shuffled;
+}

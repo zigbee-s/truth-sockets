@@ -5,7 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Multiroom</title>
+
     <script src="/socket.io/socket.io.js"></script>
+    <script src="https://kit.fontawesome.com/95a02bd20d.js"></script>
+
+    <link rel="stylesheet" href="style.css">
     <style>
         #add-questions{
             display: none;
@@ -24,8 +28,8 @@
         <br><br>
         <button id = "join-btn">Join</button>
         <br><br> 
-        <label for="create-Room-Input">Room Code</label>
-        <input type="text" id = "create-Room-Input"  placeholder=" Code" disabled>
+        <label for="create-room-input">Room Code</label>
+        <input type="text" id = "create-room-input"  placeholder=" Code" disabled>
         <br><br>
         <button id = "create-btn">Create And Join</button>
     </div>
@@ -43,9 +47,9 @@
     
     <div id="game">
         <input type="text" id = "random-question" placeholder="Asked question will appear here">
-        <button id=rotate-btn>Rotate</button><br><br>
+        <button id=rotate-btn>Next</button><br><br>
         <input type="text" id = "player-turn" placeholder="Whose turn">
-        <button id="rand-ques-btn" disabled>Random Question</button>
+        <div class="container"></div>
     </div>
 </body>
 <script src="web.js"></script>

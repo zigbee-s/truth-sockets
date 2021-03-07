@@ -1,5 +1,5 @@
 // Importing from utils.js
-const {makeid} = require('./utils');
+const {makeid,shuffleArray} = require('./utils');
 
 // Importing essentail packages
 const express = require('express');
@@ -61,6 +61,10 @@ io.on('connection',(socket) => {
                 return;
             }
 
+            if(rooms[roomCode].roomGameState == "started"){
+                socket.emit("message", "Game has already startd!");
+                return;
+            }
 
             // Increasing the number of clients in the room by 1 and pushing the new Username in the Room's username array
             rooms[roomCode].count +=1;
@@ -72,9 +76,10 @@ io.on('connection',(socket) => {
             
             // Emitting the total user count to all the clients in a room
             io.to(rooms[roomCode].code).emit("total-players",rooms[roomCode].count);
-    }
+            
+        }   
     else{
-        socket.emit("message",`The room ${roomcode} doesn't exist`);
+        socket.emit("message",`The room ${roomCode} doesn't exist`);
     }}
 
     function handleAddQues(data){
@@ -86,26 +91,39 @@ io.on('connection',(socket) => {
     }
 
     // Listening for more emits
-    socket.on("start-game", data=>{
-        io.to(data.roomCode).emit("start-game");
+    socket.on("begin-game", data=>{
+        io.to(data.roomCode).emit("begin-game");
     })    
     
     socket.on("game-started", data => {
         // Only if the room exists
         if(rooms[data.roomCode]){
             rooms[data.roomCode].roomGameState = "started";
+            let x = shuffleArray(rooms[data.roomCode].quesArray)
+            console.log(x);
+            socket.emit("game-started",x);
         }
     })
 
-    socket.on('player-turn', data=>{
-        let userTurn = rooms[data.roomCode].usersArray[data.turn -1];
-        io.to(data.roomCode).emit('player-turn',userTurn);
+    socket.on('player-turn', data =>{
+        let turn = Math.floor(Math.random() * rooms[data.roomCode].count);
+        let userTurn = rooms[data.roomCode].usersArray[turn];
+        let display ={
+            shuffledArray : shuffleArray(rooms[data.roomCode].quesArray),
+            userTurn : userTurn
+        }
+        io.to(data.roomCode).emit('player-turn', display);
     })
 
-    socket.on('rand-ques', data=>{
-        var ques = rooms[data.roomCode].quesArray[Math.floor(Math.random() * rooms[data.roomCode].quesArray.length)];
-        io.to(data.roomCode).emit("rand-ques",ques);
+    socket.on('card-clicked',data => {
+        let cardData = {
+            cardId: data.cardId,
+            quesArray : rooms[data.roomCode].quesArray,
+        };
+        io.to(data.roomCode).emit('card-clicked',cardData);
     })
+
+    
 
 })
 

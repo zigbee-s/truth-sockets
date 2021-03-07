@@ -1,0 +1,29 @@
+1.  "input-form" div is visible, but "add-questions" and "game" div's are set to be not visible 
+
+2.  When "create-btn" is clicked a function is fired which creates a random 5 letter code, 
+    which is then assigned to the room. As well as initial properties of the room are set, 
+    and this room object is then pushed in the rooms dictionary 
+
+3.  When "join-btn" is clicked and a room with the provided roomCode exists, then total 
+    number of players in room object is increased  by 1, and user's username is also stored
+     in the room object. And the users join the game. Otherwise' an error is displayed 
+
+4.  If the join process is successful, "input-form" div becomes invisible and "add-questions" div 
+    is made visible, while "game" div remains invisible 
+
+5.  When you click on add question button the given question is taken from client's html and passed
+     to the server and is stored in the quesArray of the room object 
+
+6.  When begin game is clicked, a countdown starts for all the users present in that room. 
+    (You can add questions while countdown is ongoing) 
+
+7.  Once the countdown is completed, the "game" div is made visible, while "input-form" 
+    and "add-questions" div are set to be invisible 
+
+8.  When someone clicks on rotate a request is sent to server, the server uses the value 
+    of count(total clients in that room) to pick one client randomly 
+
+9.  The randomly chosen client is allowed to ask a question to all the other players in the room 
+
+10.     Once the chosen client clicks random question, a ques is chosen randomly from quesArray of the room object, 
+    and is displayed to all the clients 
