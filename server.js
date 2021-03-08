@@ -66,10 +66,17 @@ io.on('connection',(socket) => {
                 return;
             }
 
-            // Increasing the number of clients in the room by 1 and pushing the new Username in the Room's username array
-            rooms[roomCode].count +=1;
+            // Checking if the given username already exists
+            if(rooms[roomCode].usersArray.includes(data.user)){
+                socket.emit("message","Usernmae already taken!");
+                return;
+            }
+
             rooms[roomCode].usersArray.push(data.user);
 
+            
+            // Increasing the number of clients in the room by 1 and pushing the new Username in the Room's username array
+            rooms[roomCode].count +=1;
             
             socket.join(roomCode);
             socket.emit("joined",rooms[roomCode]);
@@ -100,7 +107,6 @@ io.on('connection',(socket) => {
         if(rooms[data.roomCode]){
             rooms[data.roomCode].roomGameState = "started";
             let x = shuffleArray(rooms[data.roomCode].quesArray)
-            console.log(x);
             socket.emit("game-started",x);
         }
     })

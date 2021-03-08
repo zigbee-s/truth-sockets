@@ -34,7 +34,7 @@ const rotateBtn = document.getElementById('rotate-btn');
 
 
 let timeLeft = 10;
-let action = 1;
+
 
 const socketData={
     roomCode : "",
@@ -56,7 +56,6 @@ socket.on('joined', roomState=>{
     // Updating the socket with the room's current state
     socketData.roomCode = roomState.code;
     socketData.player = roomState.count;
-    console.log(socketData);
 })
 
 socket.on('room-created', roomCode => {
@@ -94,7 +93,7 @@ socket.on('game-started',quesArray => {
 socket.on('card-clicked',data => {
     let x = document.getElementById(data.cardId);
     socketData.questionArray = data.quesArray;
-    x.style.transform = "translateY(100px)"; 
+    x.style.transform = "translateY(70px)"; 
     for(let j =0; j<data.quesArray.length; j++){
         console.log("off");
         let y = document.getElementById(j+"a");

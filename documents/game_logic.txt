@@ -25,5 +25,5 @@
 
 9.  The randomly chosen client is allowed to ask a question to all the other players in the room 
 
-10.     Once the chosen client clicks random question, a ques is chosen randomly from quesArray of the room object, 
+10. Once the chosen client clicks random question, a ques is chosen randomly from quesArray of the room object, 
     and is displayed to all the clients 
