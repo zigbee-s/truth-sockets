@@ -7,19 +7,44 @@
     <title>Multiroom</title>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script src="https://kit.fontawesome.com/95a02bd20d.js"></script>
 
     <link rel="stylesheet" href="style.css">
     <style>
+        #input-form{
+            font-size: larger;
+            line-height: 1.2;
+            font-family: papyrus;
+            font-weight: bold;
+        }
         #add-questions{
             display: none;
+            font-size: larger;
+            line-height: 1.2;
+            font-family: papyrus;
+            font-weight: bold;
         }
         #game{
             display: none;
         }
+        input[type=text]
+        {
+            height: 30px;
+        }
+        #join-btn, #create-btn, #add-ques-btn, #start-game-btn
+        {
+            height: 30px;
+            width: 150px;
+            font-family: papyrus;
+            font-weight: bold;
+            background-image: linear-gradient(to top right, #00ced1, #9370db, #DA70D6);
+        }
+        #add-ques-btn
+        {
+            margin-top: 10%;
+        }
     </style>
 </head>
-    <div id = "input-form">
+    <div class="box" id = "input-form">
         <label for="username-input">Username</label>
         <input type="text" id="username-input">
         <br><br>
@@ -34,7 +59,7 @@
         <button id = "create-btn">Create And Join</button>
     </div>
 
-    <div id="add-questions">
+    <div class="box" id="add-questions">
         <h3>Game starts in: <span id="time-left">Not started</span></h3>
         <label for="roomCode">Room Code: </label>
         <input type="text" id = "roomCode"  disabled>
@@ -44,13 +69,13 @@
         <br><br>
         <button id="start-game-btn">Begin game</button>
     </div>
-    
+    </div>
     <div id="game">
         <input type="text" id = "random-question" placeholder="Asked question will appear here">
         <button id=rotate-btn>Next</button><br><br>
         <input type="text" id = "player-turn" placeholder="Whose turn">
         <div class="container"></div>
-    </div>
+
 </body>
 <script src="web.js"></script>
 </html>

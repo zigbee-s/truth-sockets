@@ -34,7 +34,7 @@ const rotateBtn = document.getElementById('rotate-btn');
 
 
 let timeLeft = 10;
-
+let action = 1;
 
 const socketData={
     roomCode : "",
@@ -76,7 +76,6 @@ socket.on('total-players',count => {
 // Updating Socket's question array
 socket.on('add-ques',newQuesArray=>{
     socketData.questionArray = newQuesArray;
-    console.log(socketData);
 })
 
 // Start game countdown
@@ -86,7 +85,6 @@ socket.on('begin-game', ()=>{
 
 
 socket.on('game-started',quesArray => {
-    console.log(quesArray);
     produce(quesArray);
 })
 
@@ -95,9 +93,7 @@ socket.on('card-clicked',data => {
     socketData.questionArray = data.quesArray;
     x.style.transform = "translateY(70px)"; 
     for(let j =0; j<data.quesArray.length; j++){
-        console.log("off");
         let y = document.getElementById(j+"a");
-        console.log(y);
         y.onclick = "return false";
     }
 })
@@ -199,8 +195,6 @@ function produce(arr){
         containerDiv.innerHTML += `<div class="card"  >
         <div class="face face1"  id = ${i+"a"} onclick = "onClickCardHandler(${i})">
           <div class="content">
-             <i class="fab fa-windows"></i>            
-            <h3>Windows</h3>
           </div>
         </div>
         <div class="face face2" id = ${i}>

@@ -66,17 +66,10 @@ io.on('connection',(socket) => {
                 return;
             }
 
-            // Checking if the given username already exists
-            if(rooms[roomCode].usersArray.includes(data.user)){
-                socket.emit("message","Usernmae already taken!");
-                return;
-            }
-
-            rooms[roomCode].usersArray.push(data.user);
-
-            
             // Increasing the number of clients in the room by 1 and pushing the new Username in the Room's username array
             rooms[roomCode].count +=1;
+            rooms[roomCode].usersArray.push(data.user);
+
             
             socket.join(roomCode);
             socket.emit("joined",rooms[roomCode]);
@@ -128,9 +121,6 @@ io.on('connection',(socket) => {
         };
         io.to(data.roomCode).emit('card-clicked',cardData);
     })
-
-    
-
 })
 
 
